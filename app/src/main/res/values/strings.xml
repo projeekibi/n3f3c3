@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NfcPushMessage</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">M-Cüzdan</string>
+    <string name="action_settings">Ayarlar</string>
 
+    <color name="background">#e7e7e7</color>
+    <string-array name="strArr">
+        <item>A</item>
+        <item>A</item>
+        <item>A</item>
+        <item>A</item>
+    </string-array>
 </resources>

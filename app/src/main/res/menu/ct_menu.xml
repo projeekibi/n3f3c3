@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itemSil" android:title="Kartı Sil"></item>
+    <item android:id="@+id/itemAdDegistir" android:title="Adını Değiştir"></item>
+    <item android:id="@+id/itemGecmis" android:title="Kullanım Geçmişi"></item>
+    <item android:id="@+id/itemOzellik" android:title="Kart Özellikleri"></item>
+</menu>
