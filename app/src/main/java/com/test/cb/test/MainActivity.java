@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
         if (nfcAdapter != null) {
             // adapter exists and is enabled.
             if(!nfcAdapter.isEnabled()){
-                alertbox("Uyarı","Lütfen telefonunuzun NFC özelliğini aktifleştirin. Etkinlestirmezsen kendin bilirsin");
+                alertbox("Uyarı","Lütfen telefonunuzun NFC özelliğini aktifleştirin.");
                 //Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
             }
         }
