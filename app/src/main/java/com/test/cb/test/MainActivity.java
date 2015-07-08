@@ -308,16 +308,14 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int id = item.getItemId();
 
-        // Handle item selection
+
         switch (id) {
             case R.id.itemSil:
-                Log.d("baslik","oldu mu?");
-
+                dbHelper.deleteCard(info.id);
+                adapter.notifyDataSetChanged();
             case R.id.itemAdDegistir:
                 return true;
             case R.id.itemGecmis:
@@ -331,6 +329,8 @@ public class MainActivity extends Activity {
         }
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -341,6 +341,8 @@ public class MainActivity extends Activity {
         // Handle item selection
         switch (id) {
             case R.id.itemSil:
+
+
 
             case R.id.itemAdDegistir:
                 return true;

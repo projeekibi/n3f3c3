@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void deleteCard(Long kartID) {
-        
+
 
     }
 
