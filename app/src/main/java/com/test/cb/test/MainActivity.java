@@ -317,6 +317,7 @@ public class MainActivity extends Activity {
         switch (id) {
             case R.id.itemSil:
                 Log.d("baslik","oldu mu?");
+
             case R.id.itemAdDegistir:
                 return true;
             case R.id.itemGecmis:

@@ -49,6 +49,11 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteCard(Long kartID) {
+        
+
+    }
+
     public List<Card> getAllCards() {
 
         List<Card> cards = new ArrayList<Card>();

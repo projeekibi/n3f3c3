@@ -31,6 +31,7 @@ public class Card implements Serializable {
         this.kartLogo = kartLogo;
     }
 
+
     public byte[] getKartLogo() {
         return this.kartLogo;
     }
