@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context=".MainActivity"
     android:background="@color/background">
+
     <TabHost
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -19,13 +20,13 @@
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"></TabWidget>
-
+            <!-- Sekme 1-->
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-                <!-- Sekme 1-->
+
                 <LinearLayout
                     android:id="@+id/tabKartlarim"
                     android:layout_width="fill_parent"

@@ -15,7 +15,10 @@ import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,7 +52,6 @@ public class MainActivity extends Activity {
 
         Bitmap paso38 = BitmapFactory.decodeResource(getResources(),
                 R.drawable.aktif38);
-
 
         if(firstTime){
             dbHelper.insertCard(new Card("Erciyes Üniversitesi Öğrenci Kartı", "15A547A",convertBitmapToByte(eruLogo)));
@@ -124,12 +126,28 @@ public class MainActivity extends Activity {
             }
         });
 
+
+
+        kartListesi.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id)
+            {
+               Log.d("asdasd","test");
+               MenuInflater inflater = getMenuInflater();
+               inflater.inflate(R.menu.ct_menu, menu);
+               return true;
+            }
+
+        });
+
         ImageView imgKartEkle = (ImageView) findViewById(R.id.imgViewKartEkle);
         imgKartEkle.setImageResource(R.drawable.kartekle);
         imgKartEkle.setY(400);
 
         TextView txtKartEkle = (TextView) findViewById(R.id.txtKartEkle);
         txtKartEkle.setText("Lütfen kartınızı telefona okutunuz.");
+
+
         intent = getIntent();
         handleIntent();
     }
@@ -163,6 +181,8 @@ public class MainActivity extends Activity {
 
         Button btnKaydet = (Button) dialog_newCard.findViewById(R.id.btnKaydet);
         Button btnIptal = (Button) dialog_newCard.findViewById(R.id.btnIptal);
+
+
         btnKaydet.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Do something in response to button click
@@ -296,8 +316,18 @@ public class MainActivity extends Activity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.ct_menu, menu);
+        //getMenuInflater().inflate(R.menu.ct_menu, menu);
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.ct_menu, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -306,12 +336,21 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        // Handle item selection
+        switch (id) {
+            case R.id.itemSil:
 
-        return super.onOptionsItemSelected(item);
+            case R.id.itemAdDegistir:
+                return true;
+            case R.id.itemGecmis:
+                return true;
+            case R.id.itemOzellik:
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

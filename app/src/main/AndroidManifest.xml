@@ -17,7 +17,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="Mobil Kampüs" >
+            android:label="Mobil Kampüs">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
