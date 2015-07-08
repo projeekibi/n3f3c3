@@ -126,19 +126,8 @@ public class MainActivity extends Activity {
             }
         });
 
+        registerForContextMenu(kartListesi);
 
-
-        kartListesi.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-            @Override
-            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id)
-            {
-               Log.d("asdasd","test");
-               MenuInflater inflater = getMenuInflater();
-               inflater.inflate(R.menu.ct_menu, menu);
-               return true;
-            }
-
-        });
 
         ImageView imgKartEkle = (ImageView) findViewById(R.id.imgViewKartEkle);
         imgKartEkle.setImageResource(R.drawable.kartekle);
@@ -315,19 +304,34 @@ public class MainActivity extends Activity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        //super.onCreateContextMenu(menu, v, menuInfo);
-        //getMenuInflater().inflate(R.menu.ct_menu, menu);
-
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.ct_menu, menu);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onContextItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.ct_menu, menu);
-        return true;
+        // Handle item selection
+        switch (id) {
+            case R.id.itemSil:
+                Log.d("baslik","oldu mu?");
+            case R.id.itemAdDegistir:
+                return true;
+            case R.id.itemGecmis:
+                return true;
+            case R.id.itemOzellik:
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
