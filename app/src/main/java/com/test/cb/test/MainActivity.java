@@ -126,9 +126,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        registerForContextMenu(kartListesi);
-
-
         ImageView imgKartEkle = (ImageView) findViewById(R.id.imgViewKartEkle);
         imgKartEkle.setImageResource(R.drawable.kartekle);
         imgKartEkle.setY(400);
