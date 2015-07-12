@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class DBHelper extends SQLiteOpenHelper {
     // Contacts table name
     private static final String TABLE_CARDS = "mc_kartlar";
     public Card card;
+    public Cursor cursor;
+    public List<Card> cards = new ArrayList<Card>();
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -25,8 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE " + TABLE_CARDS + "(kart_id INTEGER PRIMARY KEY AUTOINCREMENT,kart_adi VARCHAR(50),kart_logo BLOB, kart_no VARCHAR(24)" + ")";
-
+        String sql = "CREATE TABLE " + TABLE_CARDS + "(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,kart_adi VARCHAR(50),kart_logo BLOB, kart_no VARCHAR(24)" + ")";
         Log.d("DBHelper", "SQL : " + sql);
         db.execSQL(sql);
 
@@ -49,27 +51,37 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteCard(Long kartID) {
-
-
-    }
-
-    public List<Card> getAllCards() {
-
-        List<Card> cards = new ArrayList<Card>();
+    public void deleteCard(long kartID) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // String sqlQuery = "SELECT  * FROM " + TABLE_COUNTRIES;
-        // Cursor cursor = db.rawQuery(sqlQuery, null);
-        Cursor cursor = db.query(TABLE_CARDS, new String[]{"kart_id","kart_adi", "kart_no", "kart_logo"}, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            Card card = new Card();
-            card.setKartAdi(cursor.getString(1));
-            card.setKartNo(cursor.getString(2));
-            card.setImage(cursor.getBlob(3));
-            cards.add(card);
-        }
-        return cards;
+        //kartID =+1;
+        Log.d("deneme", "Kart id : " + kartID);
+        //Log.d("deneme", "kartID : " + Long.toString(kartID));
+        //Log.d("deneme","Kart ID: " + getColumn("kart_id",kartID));
+        //Log.d("deneme","Kart Adı: " + getColumn("kart_adi", kartID+2));
+        //Log.d("deneme","Kart Adı: " + getColumn("kart_adi",1));
+        db.delete(TABLE_CARDS, "_id = ?", new String[]{Long.toString(kartID)});
+        db.close();
     }
+
+    public String getColumn(String columnName, long kartID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor2;
+        String value;
+        cursor2 = db.rawQuery("SELECT " + columnName + " FROM " + TABLE_CARDS + " WHERE _id = " + Long.toString(kartID), null);
+        cursor2.moveToFirst();
+        value = cursor2.getString(cursor2.getColumnIndex(columnName));
+        return value;
+    }
+
+    public Cursor fetchAllCards() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        cursor = db.query(TABLE_CARDS, new String[]{"_id","kart_adi", "kart_no", "kart_logo"}, null, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+
 }
 

@@ -53,9 +53,15 @@ public class Card implements Serializable {
     public String getKartAdi() {
         return kartAdi;
     }
+    public Integer getKartID() {
+        return kartID;
+    }
 
     public void setKartAdi(String kartAdi) {
         this.kartAdi = kartAdi;
+    }
+    public void setKartID(Integer kartID) {
+        this.kartID = kartID;
     }
 
 

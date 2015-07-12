@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.widget.BaseAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
@@ -35,6 +38,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     final Context context = this;
+    private SimpleCursorAdapter dataAdapter;
     private NfcAdapter nfcAdapter;
     private PendingIntent mPendingIntent;
     private Intent intent;
@@ -55,7 +59,7 @@ public class MainActivity extends Activity {
 
         if(firstTime){
             dbHelper.insertCard(new Card("Erciyes Üniversitesi Öğrenci Kartı", "15A547A",convertBitmapToByte(eruLogo)));
-            //dbHelper.insertCard(new Card("Kayseri Toplu Taşıma Kartı (PASO)", "224AR77",convertBitmapToByte(paso38)));
+            dbHelper.insertCard(new Card("Kayseri Toplu Taşıma Kartı (PASO)", "224AR77",convertBitmapToByte(paso38)));
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstTime", false);
             editor.commit();
@@ -90,21 +94,21 @@ public class MainActivity extends Activity {
 
         //Kullanıcıya gösterilen ListView'a ulaşabilmek için onun bir referansını almak
         kartListesi = (ListView)findViewById(R.id.listView1);
-        registerForContextMenu(kartListesi);
-
-        //ListView'ımızı verilerle buluşturacak olan Adapter'ı tanımlamak
-        cards = dbHelper.getAllCards();
-        adapter = new CustomList(MainActivity.this, cards);
+        adapter = new CustomList(this, dbHelper.fetchAllCards());
         kartListesi.setAdapter(adapter);
+
+        registerForContextMenu(kartListesi);
 
         kartListesi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 final Dialog dialog = new Dialog(context,R.style.Dialog);
-                Card card = cards.get(position);
+                Cursor cursor = adapter.getCursor();
+                cursor.moveToPosition(position);
+
                 dialog.setContentView(R.layout.alert_design);
-                dialog.setTitle(card.getKartAdi());
+                dialog.setTitle(cursor.getString(cursor.getColumnIndex("kart_adi")));
 
                 //adapter.
                 TextView msgAlert = (TextView) dialog.findViewById(R.id.alert_message);
@@ -179,8 +183,8 @@ public class MainActivity extends Activity {
                         R.drawable.default_card);
 
                 dbHelper.insertCard(new Card(input.getText().toString(), "224AR77", convertBitmapToByte(defaultCard)));
-                cards = dbHelper.getAllCards();
-                adapter = new CustomList(MainActivity.this, cards);
+                adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
+
                 kartListesi.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 dialog_newCard.dismiss();
@@ -286,7 +290,9 @@ public class MainActivity extends Activity {
         tabHost.addTab(spec);
     }
 
-    protected void alertbox(String title, String mymessage)
+
+
+    public void alertbox(String title, String mymessage)
     {
         new AlertDialog.Builder(this)
                 .setMessage(mymessage)
@@ -311,11 +317,18 @@ public class MainActivity extends Activity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int id = item.getItemId();
 
+        Cursor cursor = adapter.getCursor();
+        cursor.moveToPosition(info.position);
+        //int kartID = cursor.getInt(cursor.getColumnIndex("_id"));
 
         switch (id) {
             case R.id.itemSil:
+                /*-------------------------  Kart Silme Modülü - Ceylan --------------------------- */
                 dbHelper.deleteCard(info.id);
+                adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
+                kartListesi.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                /*------------------------------------- ~ ----------------------------------------- */
             case R.id.itemAdDegistir:
                 return true;
             case R.id.itemGecmis:
