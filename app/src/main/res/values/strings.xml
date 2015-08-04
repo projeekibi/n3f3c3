@@ -3,6 +3,10 @@
 
     <string name="app_name">M-Cüzdan</string>
     <string name="action_settings">Ayarlar</string>
+    <string name="servicedesc">servicedesc</string>
+    <string name="aiddescription">aiddescription</string>
+
+
     <color name="background">#e7e7e7</color>
     <string-array name="strArr">
         <item>A</item>

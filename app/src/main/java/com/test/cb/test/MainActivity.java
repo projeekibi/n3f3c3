@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.widget.BaseAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.content.DialogInterface;
@@ -70,6 +71,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         createDatabase();
+        PackageManager pm = context.getPackageManager();
+        if(pm.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
+            Log.d("baslik","destekliyor.");
+        }else {
+            Log.d("baslik","desteklemez.");
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -215,11 +222,13 @@ public class MainActivity extends Activity {
             sb.append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
+
         for (String tech : tag.getTechList()) {
             if (tech.equals(MifareClassic.class.getName())) {
                 sb.append('\n');
                 MifareClassic mifareTag = MifareClassic.get(tag);
                 String type = "Unknown";
+
                 switch (mifareTag.getType()) {
                     case MifareClassic.TYPE_CLASSIC:
                         type = "Classic";
