@@ -78,22 +78,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void changeCardName(long kartID , String yeniAd) {
 
-
-
-        Log.d("deneme","ust");
         Cursor cursor3;
         SQLiteDatabase db=this.getReadableDatabase();
-        Log.d("deneme","orta");
 
         ContentValues cv = new ContentValues();
         cv.put("kart_adi", yeniAd); //These Fields should be your String values of actual column names
 
-        db.update(TABLE_CARDS, cv, "_id "+"="+Long.toString(kartID), null);
-
-
-
-        Log.d("deneme","alt");
-
+        db.update(TABLE_CARDS, cv, "_id "+"=" + Long.toString(kartID), null);
 
     }
 
