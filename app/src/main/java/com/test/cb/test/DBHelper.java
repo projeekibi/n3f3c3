@@ -73,6 +73,33 @@ public class DBHelper extends SQLiteOpenHelper {
         return value;
     }
 
+
+
+
+    public void changeCardName(long kartID , String yeniAd) {
+
+
+
+        Log.d("deneme","ust");
+        Cursor cursor3;
+        SQLiteDatabase db=this.getReadableDatabase();
+        Log.d("deneme","orta");
+
+        ContentValues cv = new ContentValues();
+        cv.put("kart_adi", yeniAd); //These Fields should be your String values of actual column names
+
+        db.update(TABLE_CARDS, cv, "_id "+"="+Long.toString(kartID), null);
+
+
+
+        Log.d("deneme","alt");
+
+
+    }
+
+
+
+
     public Cursor fetchAllCards() {
         SQLiteDatabase db = this.getWritableDatabase();
         cursor = db.query(TABLE_CARDS, new String[]{"_id","kart_adi", "kart_no", "kart_logo"}, null, null, null, null, null);
@@ -81,7 +108,5 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
-
-
 }
 

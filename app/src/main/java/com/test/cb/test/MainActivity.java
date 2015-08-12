@@ -5,7 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.PopupWindow;
 import android.widget.SimpleCursorAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,8 +50,10 @@ public class MainActivity extends Activity {
     public DBHelper dbHelper;
     private CustomList adapter;
     private List<Card> cards;
+    private PopupWindow pwindo;
 
-    public void createDatabase(){
+
+    public void createDatabase() {
         dbHelper = new DBHelper(getApplicationContext());
         SharedPreferences settings = getSharedPreferences("SQL", 0);
         boolean firstTime = settings.getBoolean("firstTime", true);
@@ -57,9 +63,9 @@ public class MainActivity extends Activity {
         Bitmap paso38 = BitmapFactory.decodeResource(getResources(),
                 R.drawable.aktif38);
 
-        if(firstTime){
-            dbHelper.insertCard(new Card("Erciyes Üniversitesi Öğrenci Kartı", "15A547A",convertBitmapToByte(eruLogo)));
-            dbHelper.insertCard(new Card("Kayseri Toplu Taşıma Kartı (PASO)", "224AR77",convertBitmapToByte(paso38)));
+        if (firstTime) {
+            dbHelper.insertCard(new Card("Erciyes Üniversitesi Öğrenci Kartı", "15A547A", convertBitmapToByte(eruLogo)));
+            dbHelper.insertCard(new Card("Kayseri Toplu Taşıma Kartı (PASO)", "224AR77", convertBitmapToByte(paso38)));
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstTime", false);
             editor.commit();
@@ -82,18 +88,17 @@ public class MainActivity extends Activity {
 
         if (nfcAdapter != null) {
             // adapter exists and is enabled.
-            if(!nfcAdapter.isEnabled()){
-                alertbox("Uyarı","Lütfen telefonunuzun NFC özelliğini aktifleştirin.");
+            if (!nfcAdapter.isEnabled()) {
+                alertbox("Uyarı", "Lütfen telefonunuzun NFC özelliğini aktifleştirin.");
                 //Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
             }
-        }
-        else {
-            alertbox("Uyarı","Telefonunuz NFC teknolojisini desteklememektedir.");
+        } else {
+            alertbox("Uyarı", "Telefonunuz NFC teknolojisini desteklememektedir.");
             return;
         }
 
         //Kullanıcıya gösterilen ListView'a ulaşabilmek için onun bir referansını almak
-        kartListesi = (ListView)findViewById(R.id.listView1);
+        kartListesi = (ListView) findViewById(R.id.listView1);
         adapter = new CustomList(this, dbHelper.fetchAllCards());
         kartListesi.setAdapter(adapter);
 
@@ -103,7 +108,7 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                final Dialog dialog = new Dialog(context,R.style.Dialog);
+                final Dialog dialog = new Dialog(context, R.style.Dialog);
                 Cursor cursor = adapter.getCursor();
                 cursor.moveToPosition(position);
 
@@ -152,7 +157,7 @@ public class MainActivity extends Activity {
         return;
     }
 
-    private byte[] convertBitmapToByte(Bitmap image){
+    private byte[] convertBitmapToByte(Bitmap image) {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -160,9 +165,9 @@ public class MainActivity extends Activity {
         return imageInByte;
     }
 
-    private void dialog_newCard(String tagData){
+    private void dialog_newCard(String tagData) {
 
-        final Dialog dialog_newCard = new Dialog(context,R.style.Dialog);
+        final Dialog dialog_newCard = new Dialog(context, R.style.Dialog);
         dialog_newCard.setContentView(R.layout.alert_newcard);
         dialog_newCard.setTitle("Kart Ekle");
 
@@ -183,6 +188,7 @@ public class MainActivity extends Activity {
                         R.drawable.default_card);
 
                 dbHelper.insertCard(new Card(input.getText().toString(), "224AR77", convertBitmapToByte(defaultCard)));
+
                 adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
 
                 kartListesi.setAdapter(adapter);
@@ -191,7 +197,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        btnIptal.setOnClickListener(new OnClickListener(){
+        btnIptal.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 dialog_newCard.dismiss();
             }
@@ -199,7 +205,6 @@ public class MainActivity extends Activity {
 
         dialog_newCard.show();
     }
-
 
 
     private String dumpTagData(Parcelable p) {
@@ -274,7 +279,7 @@ public class MainActivity extends Activity {
 
     public void tabMenu() {
         //XML 'deki tabHosta bağlantı
-        TabHost tabHost = (TabHost)findViewById(R.id.tabHost);
+        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();
 
         //Birinci Sekme
@@ -291,16 +296,15 @@ public class MainActivity extends Activity {
     }
 
 
-
-    public void alertbox(String title, String mymessage)
-    {
+    public void alertbox(String title, String mymessage) {
         new AlertDialog.Builder(this)
                 .setMessage(mymessage)
                 .setTitle(title)
                 .setCancelable(true)
                 .setNeutralButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton){}
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
                         })
                 .show();
     }
@@ -314,6 +318,8 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
+
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int id = item.getItemId();
 
@@ -330,6 +336,18 @@ public class MainActivity extends Activity {
                 adapter.notifyDataSetChanged();
                 /*------------------------------------- ~ ----------------------------------------- */
             case R.id.itemAdDegistir:
+                Log.d("deneme", "dsdsdir");
+                initiatePopupWindow(info.id);
+                Log.d("deneme", "sifir");
+
+                Log.d("deneme", "bir");
+                adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
+                Log.d("deneme", "iki");
+                kartListesi.setAdapter(adapter);
+                Log.d("deneme", "uc");
+                adapter.notifyDataSetChanged();
+                Log.d("deneme", "dort");
+
                 return true;
             case R.id.itemGecmis:
                 return true;
@@ -339,13 +357,57 @@ public class MainActivity extends Activity {
                 return true;
             default:
                 return super.onContextItemSelected(item);
+
         }
+
     }
 
+    /*------------------------PopUp Window, Elif ----------------------*/
 
+
+    public void initiatePopupWindow(long kartID) {
+        Button btnClosePopup;
+
+        try {
+
+            LayoutInflater inflater = (LayoutInflater) MainActivity.this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.screen_popup,
+                    (ViewGroup) findViewById(R.id.popup_element));
+            pwindo = new PopupWindow(layout, 600, 500, true);
+            pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+            EditText yeniKartAdi   = (EditText)findViewById(R.id.edtKartAdiDegistir);
+            String yeniAd = yeniKartAdi.getText().toString();
+            dbHelper.changeCardName(kartID, yeniAd);
+
+             btnClosePopup = (Button) layout.findViewById(R.id.btn_close_popup);
+             btnClosePopup.setOnClickListener(cancel_button_click_listener);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    private OnClickListener cancel_button_click_listener = new OnClickListener() {
+        public void onClick(View v) {
+
+
+            pwindo.dismiss();
+
+        }
+
+
+    };
+
+    /*------------------------ ~ ----------------------*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -354,7 +416,6 @@ public class MainActivity extends Activity {
         // Handle item selection
         switch (id) {
             case R.id.itemSil:
-
 
 
             case R.id.itemAdDegistir:
@@ -395,4 +456,28 @@ public class MainActivity extends Activity {
         adapter.disableForegroundDispatch(activity);
     }
 
-}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
