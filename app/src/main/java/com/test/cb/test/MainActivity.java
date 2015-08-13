@@ -342,10 +342,12 @@ public class MainActivity extends Activity {
                 adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
                 kartListesi.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                return true;
                 /*------------------------------------- ~ ----------------------------------------- */
             case R.id.itemAdDegistir:
                 /*-------------------------  Kart Adı Değiştirme Modülü - Elif -------------------- */
                 initiatePopupWindow(info.id);
+                return true;
                 /*------------------------------------- ~ ----------------------------------------- */
             case R.id.itemGecmis:
                 return true;
