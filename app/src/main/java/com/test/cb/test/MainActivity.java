@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class MainActivity extends Activity {
     private CustomList adapter;
     private List<Card> cards;
     private PopupWindow pwindo;
+    private PopupWindow pKOZwindo;
 
 
     public void createDatabase() {
@@ -78,6 +80,7 @@ public class MainActivity extends Activity {
         createDatabase();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Üstteki sekmeleri oluşturur.
         tabMenu();
@@ -153,6 +156,7 @@ public class MainActivity extends Activity {
 
             Parcelable tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             dialog_newCard(dumpTagData(tag));
+
         }
         return;
     }
@@ -249,6 +253,9 @@ public class MainActivity extends Activity {
                 sb.append(mifareTag.getBlockCount());
             }
         }
+        Log.d("deneme", "heyo");
+        dbHelper.insert2Card(new Card(sb.toString()));  // kart özelliklerini içeren sb, insertCard2 fonksiyonuna gönderildi
+        Log.d("deneme", "heyo2");
         return sb.toString();
     }
 
@@ -342,6 +349,7 @@ public class MainActivity extends Activity {
             case R.id.itemGecmis:
                 return true;
             case R.id.itemOzellik:
+                initiatePopupWindowKOZ();  //KOZ : Kart OZellikleri
                 return true;
             case R.id.action_settings:
                 return true;
@@ -351,6 +359,41 @@ public class MainActivity extends Activity {
         }
 
     }
+
+    /*------------------------------------- PopUp Window KOZ - Elif ---------------------------------- */
+
+    public void initiatePopupWindowKOZ() {  //KOZ = Kart OZellikleri. Bu popup kart özelliklerinin ekranda görünmesi için oluşturuldu
+        Button btnClosePopupKOZ;
+
+        try {
+            LayoutInflater inflater = (LayoutInflater) MainActivity.this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View pop = inflater.inflate(R.layout.kart_ozellikleri_popup, null, false);
+
+            pKOZwindo = new PopupWindow(pop, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+            pKOZwindo.showAtLocation(pop, Gravity.CENTER, 0, 0);
+
+            btnClosePopupKOZ = (Button) pop.findViewById(R.id.btn_close_KOZ);
+            btnClosePopupKOZ.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    pKOZwindo.dismiss();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Hata", e.getMessage());
+        }
+    }
+
+ /*------------------------------------- ~ ----------------------------------------- */
+
+
+
 
     /*------------------------------------- PopUp Window - Elif ---------------------------------- */
     public void initiatePopupWindow(final long kartID) {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_element"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#444444"
+    android:orientation="vertical"
+    android:padding="10sp" >
+
+    <TextView
+        android:id="@+id/txtKartOzellikleri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Kart Özellikleri:"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:id="@+id/txtBilgiGoster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Kart Özellikleri:"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        />
+
+    <Button
+        android:id="@+id/btn_close_KOZ"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text=" Tamam "
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        />
+
+
+
+</LinearLayout>
+
+

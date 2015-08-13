@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,9 +16,10 @@ import java.util.List;
  * Created by CB on 3.2.2015.
  */
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME   = "mcuzdanDB";
+    private static final String DATABASE_NAME = "mcuzdanDB";
     // Contacts table name
     private static final String TABLE_CARDS = "mc_kartlar";
+    private static final String TABLE_CARD_SPECTS = "mc_kart_ozellikleri";
     public Card card;
     public Cursor cursor;
     public List<Card> cards = new ArrayList<Card>();
@@ -31,6 +33,10 @@ public class DBHelper extends SQLiteOpenHelper {
         String sql = "CREATE TABLE " + TABLE_CARDS + "(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,kart_adi VARCHAR(50),kart_logo BLOB, kart_no VARCHAR(24)" + ")";
         Log.d("DBHelper", "SQL : " + sql);
         db.execSQL(sql);
+
+        String sql2 = "CREATE TABLE " + TABLE_CARD_SPECTS + "(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,kart_ozellikleri VARCHAR(500))" + ")";
+        Log.d("DBHelper", "SQL : " + sql2);
+        db.execSQL(sql2);
 
     }
 
@@ -47,7 +53,22 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("kart_adi", card.getKartAdi());
         values.put("kart_no", card.getKartNo());
         values.put("kart_logo", card.getKartLogo());
-        db.insert(TABLE_CARDS, null,values);
+        db.insert(TABLE_CARDS, null, values);
+
+        ContentValues values2 = new ContentValues();
+        values2.put("kart_ozellikleri", card.getKartOzellikleri());
+        db.insert(TABLE_CARDS, null, values2);
+
+        db.close();
+    }
+
+    public void insert2Card(Card card) {        // Kart özelliklerinin insert edilmesi için oluşturuldu
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values2 = new ContentValues();
+        values2.put("kart_ozellikleri", card.getKartOzellikleri());
+        db.insert(TABLE_CARDS, null, values2);
+        Log.d("deneme", "heyo5");
         db.close();
     }
 
@@ -74,30 +95,29 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
-
-    public void changeCardName(long kartID , String yeniAd) {
+    public void changeCardName(long kartID, String yeniAd) {
 
         Cursor cursor3;
-        SQLiteDatabase db=this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put("kart_adi", yeniAd); //These Fields should be your String values of actual column names
 
-        db.update(TABLE_CARDS, cv, "_id "+"=" + Long.toString(kartID), null);
+        db.update(TABLE_CARDS, cv, "_id " + "=" + Long.toString(kartID), null);
 
     }
 
 
-
-
     public Cursor fetchAllCards() {
         SQLiteDatabase db = this.getWritableDatabase();
-        cursor = db.query(TABLE_CARDS, new String[]{"_id","kart_adi", "kart_no", "kart_logo"}, null, null, null, null, null);
+        cursor = db.query(TABLE_CARDS, new String[]{"_id", "kart_adi", "kart_no", "kart_logo"}, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
+
+
 }
+
 

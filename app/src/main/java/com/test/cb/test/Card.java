@@ -1,3 +1,9 @@
+/*Kart ozelliklerinin görüneceği popup oluşturuldu.
+* kart eklendiği anda özelliklerinin veritabanına kaydedilmesi sağlandı gibi duruyor
+* ancak özelliklerin ekranda gösterilmesi sağlanamadığı için emin olamadım.
+* HATA:Bu kodda veri silme işleminden sonra yeni ad girme ekranı çıkıyor.*/
+
+
 package com.test.cb.test;
 
 import android.util.Log;
@@ -12,6 +18,7 @@ public class Card implements Serializable {
     private int kartID;
     private String kartAdi;
     private String kartNo;
+    private String kartOzellikleri;
     byte[] kartLogo;
 
     public Card() {
@@ -30,6 +37,14 @@ public class Card implements Serializable {
         this.kartNo = kartNo;
         this.kartLogo = kartLogo;
     }
+
+    public Card(String kartOzellikleri){    //Kart özelliklerini parametre alan constructor
+        super();
+        this.kartOzellikleri = kartOzellikleri;
+        Log.d("deneme","heyo3");
+
+    }
+
 
 
     public byte[] getKartLogo() {
@@ -53,6 +68,15 @@ public class Card implements Serializable {
     public String getKartAdi() {
         return kartAdi;
     }
+
+
+    public String getKartOzellikleri() {    //Kart özelliklerini alan fonksiyon
+        Log.d("deneme","heyo4");
+        return kartOzellikleri;
+
+    }
+
+
     public Integer getKartID() {
         return kartID;
     }
