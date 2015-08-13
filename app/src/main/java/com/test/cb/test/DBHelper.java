@@ -31,7 +31,6 @@ public class DBHelper extends SQLiteOpenHelper {
         String sql = "CREATE TABLE " + TABLE_CARDS + "(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,kart_adi VARCHAR(50),kart_logo BLOB, kart_no VARCHAR(24)" + ")";
         Log.d("DBHelper", "SQL : " + sql);
         db.execSQL(sql);
-
     }
 
 
