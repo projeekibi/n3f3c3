@@ -328,7 +328,6 @@ public class MainActivity extends Activity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int id = item.getItemId();
 
@@ -345,19 +344,9 @@ public class MainActivity extends Activity {
                 adapter.notifyDataSetChanged();
                 /*------------------------------------- ~ ----------------------------------------- */
             case R.id.itemAdDegistir:
-                Log.d("deneme", "dsdsdir");
+                /*-------------------------  Kart Adı Değiştirme Modülü - Elif -------------------- */
                 initiatePopupWindow(info.id);
-                Log.d("deneme", "sifir");
-
-                Log.d("deneme", "bir");
-                adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
-                Log.d("deneme", "iki");
-                kartListesi.setAdapter(adapter);
-                Log.d("deneme", "uc");
-                adapter.notifyDataSetChanged();
-                Log.d("deneme", "dort");
-
-                return true;
+                /*------------------------------------- ~ ----------------------------------------- */
             case R.id.itemGecmis:
                 return true;
             case R.id.itemOzellik:
@@ -371,48 +360,50 @@ public class MainActivity extends Activity {
 
     }
 
-    /*------------------------PopUp Window, Elif ----------------------*/
-
-
-    public void initiatePopupWindow(long kartID) {
+    /*------------------------------------- PopUp Window - Elif ---------------------------------- */
+    public void initiatePopupWindow(final long kartID) {
         Button btnClosePopup;
 
         try {
-
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.screen_popup,
-                    (ViewGroup) findViewById(R.id.popup_element));
-            pwindo = new PopupWindow(layout, 600, 500, true);
-            pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
+            final View pop = inflater.inflate(R.layout.screen_popup, null, false);
+            /* Ceylan  - Benim telefonumda 400 * 600 olunca kaydet butonu görülmüyordu o yüzden ikisini de
+                         ViewGroup.LayoutParams.WRAP_CONTENT olarak değiştirdim. */
+            pwindo = new PopupWindow(pop, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-            EditText yeniKartAdi   = (EditText)findViewById(R.id.edtKartAdiDegistir);
-            String yeniAd = yeniKartAdi.getText().toString();
-            dbHelper.changeCardName(kartID, yeniAd);
+            pwindo.showAtLocation(pop, Gravity.CENTER, 0, 0);
 
-             btnClosePopup = (Button) layout.findViewById(R.id.btn_close_popup);
-             btnClosePopup.setOnClickListener(cancel_button_click_listener);
+            btnClosePopup = (Button) pop.findViewById(R.id.btn_close_popup);
+
+            btnClosePopup.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+
+                    //EditText ‘i onClick fonksiyonunun içine taşıdım - Ceylan
+                    EditText yeniKartAdi = (EditText) pop.findViewById(R.id.edtKartAdiDegistir);
+                    String yeniAd = yeniKartAdi.getText().toString();
+
+                    // Kart adı değiştiriliyor.
+                    dbHelper.changeCardName(kartID, yeniAd);
+
+                    /* Değişim yapıldıktan sonra liste yenilemesi için aşağıdaki üç satır gereklidir.- Ceylan*/
+                    adapter = new CustomList(MainActivity.this, dbHelper.fetchAllCards());
+                    kartListesi.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    // Değişim yapıldı, liste yenilendi, şimdi de popup kapatılıyor.
+                    pwindo.dismiss();
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d("Hata", e.getMessage());
         }
-
-
-
     }
 
-    private OnClickListener cancel_button_click_listener = new OnClickListener() {
-        public void onClick(View v) {
-
-
-            pwindo.dismiss();
-
-        }
-
-
-    };
-
-    /*------------------------ ~ ----------------------*/
+    /*------------------------------------- ~ ----------------------------------------- */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
