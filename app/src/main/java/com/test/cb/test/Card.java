@@ -1,8 +1,3 @@
-/*Kart ozelliklerinin görüneceği popup oluşturuldu.
-* kart eklendiği anda özelliklerinin veritabanına kaydedilmesi sağlandı gibi duruyor
-* ancak özelliklerin ekranda gösterilmesi sağlanamadığı için emin olamadım.
-* HATA:Bu kodda veri silme işleminden sonra yeni ad girme ekranı çıkıyor.*/
-
 
 package com.test.cb.test;
 
